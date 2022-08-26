@@ -21,7 +21,7 @@ function App() {
         <select>
           {coins.map((coin) => (
             <option>
-              {coin.name}({coin.symbol}):${coin.quotes.USD.price}
+              {coin.name} ({coin.symbol}): ${coin.quotes.USD.price} USD
             </option>
           ))}
         </select>
