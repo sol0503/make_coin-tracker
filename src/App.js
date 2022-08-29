@@ -1,23 +1,30 @@
-import "./App.css";
 import { useEffect, useState } from "react";
 
 function App() {
   const [loading, setLoding] = useState(true);
   const [coins, setCoins] = useState([]);
   const [value, setValue] = useState("");
-  const [price, setPrice] = useState("");
+  const [selected, setSelected] = useState();
+  // const [price, setPrice] = useState("");
   const onChange = (e) => {
     setValue(e.target.value);
   };
-  const onSubmit = () => {};
   useEffect(() => {
     fetch("https://api.coinpaprika.com/v1/tickers")
       .then((response) => response.json())
       .then((json) => {
+        console.log(json);
         setCoins(json);
         setLoding(false);
       });
   }, []);
+
+  const onSubmit = (e) => {
+    console.log(e.target.value);
+    const obj = JSON.parse(e.target.value);
+    setSelected(obj);
+  };
+
   return (
     <div>
       <h1>The Coins!{loading ? "" : `(${coins.length})`} </h1>
@@ -32,9 +39,13 @@ function App() {
         {loading ? (
           <strong>Loading...</strong>
         ) : (
-          <select>
-            {coins.map((coin, rank) => (
-              <option id={rank}>
+          <select
+            onChange={(e) => {
+              onSubmit(e);
+            }}
+          >
+            {coins.map((coin, idx) => (
+              <option key={idx} value={JSON.stringify(coin)}>
                 {coin.name} ({coin.symbol}): ${coin.quotes.USD.price} USD
               </option>
             ))}
@@ -42,15 +53,12 @@ function App() {
         )}
       </div>
       <div>
-        <button onClick={onSubmit}>입력하기</button>
+        <button>입력하기</button>
       </div>
       <hr />
+
       <div>
-        {coins.map((coin) => (
-          <option>
-            {coin.name}으로 환전한 값은? ${value * coin.quotes.USD.price}
-          </option>
-        ))}
+        {selected?.name} :{selected?.quotes?.USD?.price * value}
       </div>
     </div>
   );
