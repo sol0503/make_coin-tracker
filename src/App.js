@@ -5,7 +5,8 @@ function App() {
   const [coins, setCoins] = useState([]);
   const [value, setValue] = useState("");
   const [selected, setSelected] = useState();
-  // const [price, setPrice] = useState("");
+  const [show, setShow] = useState(false);
+
   const onChange = (e) => {
     setValue(e.target.value);
   };
@@ -23,6 +24,11 @@ function App() {
     console.log(e.target.value);
     const obj = JSON.parse(e.target.value);
     setSelected(obj);
+    setShow(false);
+  };
+
+  const onSelect = () => {
+    setShow(!show);
   };
 
   return (
@@ -44,6 +50,7 @@ function App() {
               onSubmit(e);
             }}
           >
+            <option key={0}>하나선택하세요</option>,
             {coins.map((coin, idx) => (
               <option key={idx} value={JSON.stringify(coin)}>
                 {coin.name} ({coin.symbol}): ${coin.quotes.USD.price} USD
@@ -53,15 +60,17 @@ function App() {
         )}
       </div>
       <div>
-        <button>입력하기</button>
+        <button onClick={onSelect}>입력하기</button>
       </div>
       <hr />
 
       <div>
-        {selected?.name} :{selected?.quotes?.USD?.price * value}
+        {show
+          ? `${selected?.name} :${selected?.quotes?.USD?.price * value}`
+          : null}
       </div>
     </div>
   );
 }
-
+// stringify로 객체를 문자열로 바까주고 parse를 통해 문자열을 객체로 바까줄수있따.
 export default App;
