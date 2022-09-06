@@ -65,9 +65,7 @@ function App() {
       <hr />
 
       <div>
-        {show
-          ? `${selected?.name} :${selected?.quotes?.USD?.price * value}`
-          : null}
+        {show && `${selected?.name} :${selected?.quotes?.USD?.price * value}`}
       </div>
     </div>
   );
